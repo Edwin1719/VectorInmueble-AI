@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.so
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Editor/IDE files
+.vscode/
+.idea/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Output reports
+reporte_inversion_pereira.md
+
+# CrewAI project specific ignores
+crewai_logs/
+.crewai_cache/

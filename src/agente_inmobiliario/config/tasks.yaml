@@ -1,0 +1,92 @@
+# Defines the tasks that the crew will perform.
+# See: https://docs.crewai.com/core-concepts/Tasks/
+
+property_scraping_task:
+  description: >
+    Tu tarea principal es encontrar y compilar una lista de AL MENOS 10 propiedades en venta 
+    en Pereira, Colombia, que se ajusten ESTRICTAMENTE a los siguientes criterios:
+    - Tipo de Propiedad: {tipos_propiedad}
+    - Sectores: {sectores}
+    - Estratos: {estratos}
+    - Precio: {precio_min} - {precio_max} COP
+    - Área: {area_min} - {area_max} m²
+
+    Para lograrlo, sigue este proceso de forma iterativa:
+    1. Realiza búsquedas web ALTAMENTE ESPECÍFICAS para encontrar ANUNCIOS INDIVIDUALES.
+       Varía tus consultas de búsqueda para maximizar los resultados.
+       Ejemplo de consulta: "apartamento en venta 80m2 estrato 3 Parque Industrial Pereira".
+    2. Por CADA propiedad que encuentres, usa tus herramientas para visitar la URL y extraer 
+       los datos: precio, área en m², sector, habitaciones, baños y estrato.
+    3. REGLA CRÍTICA DE VALIDACIÓN DE URL: La URL final que reportes DEBE ser la del anuncio 
+       individual. NO PUEDE ser una página de listados o de búsqueda. Revisa la URL: si 
+       contiene términos genéricos como `/search`, `/filter`, `/inmuebles`, `/propiedades`, 
+       `/venta` (sin un identificador único después), es INCORRECTA y debes descartarla.
+    4. Continúa el proceso hasta que hayas recopilado al menos 10 propiedades con URLs VÁLIDAS.
+    5. Consolida toda la información en un único informe estructurado.
+  expected_output: >
+    Un informe en formato markdown con la información de al menos 10 propiedades. Cada una debe 
+    incluir: precio, m², ubicación, habitaciones, baños, estrato y la URL directa y específica.
+
+    EJEMPLO DE CÓMO DEBEN SER LAS URLS:
+    - URL BUENA: `https://www.fincaraiz.com.co/apartamento-en-venta/pereira/obispos-det-1234567` (incluye un ID o nombre único)
+    - URL MALA: `https://www.fincaraiz.com.co/venta/apartamentos/pereira/` (es una página de búsqueda)
+    - URL MALA: `https://casas.trovit.com.co/apartamento-parque-industrial-pereira` (es una página de búsqueda)
+
+    Si después de una búsqueda exhaustiva no encuentras 10 propiedades con URLs válidas, 
+    entrega las que hayas encontrado y añade una nota al respecto.
+
+market_research_task:
+  description: >
+    Utilizando tu herramienta de búsqueda web ('Search the internet with Serper'), realiza una investigación de mercado exhaustiva
+    sobre el sector inmobiliario en Pereira, Colombia. La investigación debe cubrir los
+    siguientes puntos clave:
+    - Tendencias de precios en los sectores de {sectores} para 2024-2025.
+    - Tasas de interés actuales para créditos hipotecarios en los principales bancos de Colombia.
+    - Proyectos de infraestructura relevantes (nuevas vías, centros comerciales, etc.) que
+      puedan impactar los valores de las propiedades en Pereira.
+    - Políticas de vivienda del gobierno colombiano aplicables a la región.
+    - Breve comparación de precio por m² con Manizales y Armenia.
+  expected_output: >
+    Una cadena de texto (string) en formato markdown que resuma los hallazgos clave de la
+    investigación. Este texto debe proporcionar el contexto económico y de mercado
+    necesario para evaluar correctamente las propiedades encontradas.
+
+financial_analysis_task:
+  description: >
+    Utilizando el listado de propiedades de la tarea 'property_scraping_task' y el
+    contexto de la tarea 'market_research_task', realizar un análisis financiero
+    detallado. El objetivo es identificar el "Top 10" de las mejores oportunidades
+    de inversión.
+    El análisis debe incluir:
+    - Cálculo del precio por m² para cada propiedad y compararlo con el promedio del sector.
+    - Estimación del Retorno de Inversión (ROI) anual. Para esto, DEBES realizar una nueva búsqueda web para encontrar el precio de alquiler mensual promedio para propiedades con características (área, número de habitaciones) y ubicación (sector, estrato) similares. Con ese dato, calcula el ROI anual usando la fórmula: ((Alquiler Mensual Promedio * 12) / Precio de la Propiedad) * 100. Está PROHIBIDO asumir un porcentaje de ROI estándar.
+    - Creación de un "Score de Oportunidad" (1-10) para cada propiedad, justificando el puntaje.
+    - Generar la tabla final con el Top 10 (o las que se hayan encontrado).
+  expected_output: >
+    Una cadena de texto (string) en formato markdown que contenga OBLIGATORIAMENTE
+    una tabla con el "Top 10" (o menos, si no se encuentran suficientes) de las mejores 
+    oportunidades de inversión. La tabla DEBE tener el siguiente formato exacto:
+
+    | Rank | Sector | Estrato | Precio (COP) | M² | Precio/M² | ROI % (Est.) | Score | Comentarios | URL |
+    |------|--------|---------|--------------|----|-----------|--------------|-------|-------------|-----|
+    | 1    | Nombre | X       | XXX.XXX.XXX  | XX | X.XXX.XXX | X%           | X/10  | Comentario  | [Link](URL) |
+    | 2    | Nombre | X       | XXX.XXX.XXX  | XX | X.XXX.XXX | X%           | X/10  | Comentario  | [Link](URL) |
+
+report_generation_task:
+  description: >
+    Consolidar los resultados de las tareas anteriores ('property_scraping_task',
+    'market_research_task', 'financial_analysis_task') en un reporte ejecutivo final
+    para un inversor. El reporte debe ser claro, profesional y directo.
+    Debe contener:
+    1. Un resumen ejecutivo con los hallazgos más importantes.
+    2. El análisis de mercado resumido.
+    3. La tabla del "Top 10" de oportunidades de inversión generada por el analista financiero.
+    4. Una conclusión con recomendaciones estratégicas sobre dónde y cómo invertir.
+  expected_output: >
+    El contenido completo del reporte final en formato markdown como una única cadena de texto (string).
+    Este debe ser el resultado final de tu trabajo, consolidando toda la información de
+    manera clara y profesional.
+  context:
+    - property_scraping_task
+    - market_research_task
+    - financial_analysis_task

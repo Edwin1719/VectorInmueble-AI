@@ -1,0 +1,5 @@
+crewai[tools]>=0.203.1,<1.0.0
+python-dotenv
+langchain-openai
+streamlit
+tavily-python
