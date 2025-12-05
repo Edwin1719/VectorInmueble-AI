@@ -5,6 +5,8 @@
 ![Framework: CrewAI](https://img.shields.io/badge/Framework-CrewAI-orange.svg)
 ![Frontend: Streamlit](https://img.shields.io/badge/Frontend-Streamlit-ff69b4.svg)
 
+![texto del vínculo](https://estavia.ai/_astro/cover.DwkNMiDy_Z1CrC93.webp)
+
 > La plataforma de análisis inmobiliario con IA, adaptable a cualquier mercado del mundo. Despliega un equipo de agentes especializados que generan informes detallados sobre precios, zonas de alto valor y proyecciones de rentabilidad para que descubras oportunidades ocultas y tomes decisiones de inversión estratégicas.
 
 ## Descripción General
